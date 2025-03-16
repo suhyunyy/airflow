@@ -1,32 +1,26 @@
-from airflow import DAG
+from airflow.models.dag import DAG
+import datetime
+import pendulum
 from airflow.operators.bash import BashOperator
-from datetime import datetime
 
-# DAG 기본 설정
-default_args = {
-    'owner': 'airflow',
-    'start_date': datetime(2024, 3, 1),
-    'retries': 1,
-}
 
-dag = DAG(
-    dag_id='bash_operator_example',
-    default_args=default_args,
-    catchup=False
+with DAG(
+    dag_id="bash_operator_example",
+    schedule="0 0 * * *",
+    start_date=pendulum.datetime(2021, 1, 1, tz="Asia/Seoul"),
+    catchup=False,
+    dagrun_timeout=datetime.timedelta(minutes=60),
+) as dag:
+    bash_t1 = BashOperator(
+        task_id="bahs_t1",
+        bash_command='echo "Hello, Airflow!"',
+    )
+    bash_t2 = BashOperator(
+    task_id="bahs_t2",
+    bash_command="la -l",
 )
+    
+    bash_t1 >> bash_t2
 
-# BashOperator를 사용한 Task 정의
-task_1 = BashOperator(
-    task_id='print_hello',
-    bash_command='echo "Hello, Airflow!"',
-    dag=dag
-)
 
-task_2 = BashOperator(
-    task_id='list_files',
-    bash_command='ls -l',
-    dag=dag
-)
-
-# Task 실행 순서 정의
-task_1 >> task_2
+    
