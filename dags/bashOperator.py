@@ -17,7 +17,7 @@ with DAG(
     )
     bash_t2 = BashOperator(
     task_id="bahs_t2",
-    bash_command="la -l",
+    bash_command="ls -al",
 )
     
     bash_t1 >> bash_t2
