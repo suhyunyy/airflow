@@ -20,7 +20,7 @@ dag = DAG(
 # BashOperator Task
 process_csv_task = BashOperator(
     task_id="process_csv",
-    bash_command="set -e; /opt/airflow/plugins/shell/process_csv.sh ",  # 스크립트 실행
+    bash_command="/opt/airflow/plugins/shell/process_csv.sh ",  # 스크립트 실행
     dag=dag,
 )
 
