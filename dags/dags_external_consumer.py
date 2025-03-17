@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 dag_b = DAG(
     dag_id="dag_b",
     start_date=datetime(2025, 3, 1),
-    schedule_interval="@daily"
 )
 
 wait_for_task_a = ExternalTaskSensor(
