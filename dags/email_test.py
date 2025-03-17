@@ -7,7 +7,7 @@ from airflow.utils.email import send_email
 def failure_callback(context):
     email_operator = EmailOperator(
         task_id='send_failure_email',
-        to='diddbwjd1931463@gmail.com',
+        to='shkang991@gmail.com',
         subject='Airflow Task 실패 알림',
         html_content=f"""
         <h3>Task 실패 알림</h3>
