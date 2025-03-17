@@ -4,8 +4,7 @@ from datetime import datetime
 
 dag_a = DAG(
     dag_id="dag_a",
-    start_date=datetime(2025, 3, 1),
-    schedule_interval="@daily"
+    start_date=datetime.now() - timedelta(seconds=1),  # 현재 시간 기준으로 실행
 )
 
 task_a = EmptyOperator(
