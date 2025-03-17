@@ -22,11 +22,7 @@ def transform_csv():
 
 # DAG 설정
 default_args = {
-    "owner": "airflow",
-    "depends_on_past": False,
     "start_date": datetime(2025, 3, 1),
-    "retries": 1,
-    "retry_delay": timedelta(minutes=5),
 }
 
 dag = DAG(
@@ -34,7 +30,6 @@ dag = DAG(
     default_args=default_args,
     description="DAG to read and transform CSV file",
     schedule_interval="@daily",
-    catchup=False,
 )
 
 # PythonOperator Task
