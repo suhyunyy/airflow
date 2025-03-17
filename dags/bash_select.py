@@ -4,20 +4,20 @@ import datetime
 from airflow.operators.bash import BashOperator
 
 with DAG(
-    dag_id="dags_bash_select_dog",
-    schedule="10 0 * * 6#1",
-    start_date=pendulum.datetime(2023, 8, 1, tz="UTC"),
+    dag_id="dags_bash_select_fruit",
+    schedule="10 0 * * 6#1", # 첫 번째 토요일 0시 10분마다
+    start_date=pendulum.datetime(2023, 3, 1, tz="Asia/Seoul"),
     catchup=False
 ) as dag:
-
-    t1_dachshund = BashOperator(
-        task_id="t1_dachshund",
-        bash_command="/plugins/shell/fruit.sh ORANGE",
+    
+    t1_orange = BashOperator(
+        task_id="t1_orange",
+        bash_command="/opt/airflow/plugins/shell/select_fruit.sh ORANGE",
     )
 
-    t2_pomeranian = BashOperator(
-        task_id="t2_pomeranian",
-        bash_command="/plugins/shell/fruit.sh GRAPE",
+    t2_avocado = BashOperator(
+        task_id="t2_avocado",
+        bash_command="/opt/airflow/plugins/shell/select_fruit.sh AVOCADO",
     )
 
-    t1_dachshund >> t2_pomeranian
+    t1_orange >> t2_avocado
