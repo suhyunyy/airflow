@@ -1,9 +1,8 @@
 #!/bin/bash
 
 # 파일 경로 설정
-INPUT_FILE="dags/input_raw.csv"
+INPUT_FILE="/input_raw.csv"
 OUTPUT_FILE="dags/output_process.csv"
-
 
 echo "Input File Content ($INPUT_FILE):"
 cat "$INPUT_FILE"
