@@ -8,5 +8,3 @@ elif [ $FRUIT == GRAPE ];then
 else
     echo "You selected other Fruit!"
 fi
-
-
