@@ -4,8 +4,9 @@ from datetime import datetime, timedelta
 import pandas as pd
 
 # CSV 파일 경로
-CSV_FILE_PATH = "dags/data.csv"
-OUTPUT_FILE_PATH = "dags/output.csv"
+# dag와 동일한 경로
+CSV_FILE_PATH = "dags/input_data.csv"
+OUTPUT_FILE_PATH = "dags/output_data.csv"
 
 # 데이터 변환 함수
 def transform_csv():
@@ -29,7 +30,6 @@ dag = DAG(
     "csv_transform_dag",
     default_args=default_args,
     description="DAG to read and transform CSV file",
-    schedule_interval="@daily",
 )
 
 # PythonOperator Task
