@@ -23,23 +23,38 @@ def process_data(**kwargs):
 
     ti.xcom_push(key="processed_data", value=df.to_dict())  # XCom에 데이터 저장
 
-# Task 3: 데이터 저장 (50% 확률로 실패)
+# Task 3: 데이터 저장 
 def store_data(**kwargs):
     ti = kwargs['ti']
-    data_dict = ti.xcom_pull(task_ids="process_data", key="processed_data")  # XCom에서 데이터 가져오기
+    data_dict = ti.xcom_pull(task_ids="process_data", key="processed_data")  
     df = pd.DataFrame(data_dict)
 
-    if random.choice([True, False]):
-        raise ConnectionError("데이터베이스 연결 실패!")
+    # 존재하지 않는 데이터베이스에 연결 시도
+    try:
+        conn = psycopg2.connect(
+            host="localhost",
+            database="non_existent_db",
+            user="airflow_user",
+            password="wrong_password",
+            port="5432"
+        )
+        cursor = conn.cursor()
+        for _, row in df.iterrows():
+            cursor.execute(
+                "INSERT INTO users (id, name, age, age_group) VALUES (%s, %s, %s, %s)",
+                (row["id"], row["name"], row["age"], row["age_group"])
+            )
+        conn.commit()
+        cursor.close()
+        conn.close()
+        print("데이터 저장 완료")
 
-    conn = sqlite3.connect("/opt/airflow/dags/test_db.sqlite")  # Airflow 환경에서 접근 가능하도록 경로 설정
-    df.to_sql("users", conn, if_exists="replace", index=False)
-    conn.close()
-    print("데이터 저장 완료")
+    except Exception as e:
+        raise ConnectionError(f"데이터베이스 연결 실패: {e}")
 
 # DAG 정의
 dag = DAG(
-    "dag_csv_processing",
+    "dag_logs_processing",
     schedule_interval="@daily",
     start_date=datetime(2025, 3, 1),
     catchup=False
@@ -55,14 +70,12 @@ task_1 = PythonOperator(
 task_2 = PythonOperator(
     task_id="process_data",
     python_callable=process_data,
-    provide_context=True,
     dag=dag
 )
 
 task_3 = PythonOperator(
     task_id="store_data",
     python_callable=store_data,
-    provide_context=True,
     dag=dag
 )
 
