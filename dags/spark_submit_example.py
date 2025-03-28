@@ -15,6 +15,5 @@ with DAG(
         application='/opt/airflow/dags/scripts/spark_wordcount.py',
         conn_id='spark_default',
         conf={'spark.master': 'spark://spark-master:7077'},
-        env={'JAVA_HOME': '/opt/bitnami/java'},  
         verbose=True
     )
