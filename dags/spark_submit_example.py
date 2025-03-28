@@ -12,7 +12,7 @@ with DAG(
 
     submit_job = SparkSubmitOperator(
         task_id='spark_submit_task',
-        application='/opt/airflow/dags/scripts/wordcount.py',
+        application='/opt/airflow/dags/scripts/spark_wordcount.py',
         conn_id='spark_default',
         conf={'spark.master': 'spark://spark-master:7077'},
         verbose=True
